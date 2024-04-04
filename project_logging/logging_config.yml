@@ -1,0 +1,56 @@
+version: 1
+disable_existing_loggers: False
+
+# Formatters
+formatters:
+  simple:
+    format: '[%(asctime)s %(filename)s:%(lineno)s] %(levelname)s: %(message)s'
+  colored:
+    (): "project_logging.formatter.ColoredFormatter"
+    format: '[%(asctime)s %(filename)s:%(lineno)s] %(levelname)s: %(message)s'
+
+# Logger handlers
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: DEBUG
+    formatter: colored
+    stream: ext://sys.stdout
+  all_logs_handler:
+    class: logging.handlers.RotatingFileHandler
+    level: DEBUG
+    formatter: simple
+    filename: logs/crypto.log
+    maxBytes: 52428800  # 50MB
+    backupCount: 4
+    encoding: utf8
+  train_file_handler:
+    class: logging.handlers.RotatingFileHandler
+    level: DEBUG
+    formatter: simple
+    filename: logs/train_logs.log
+    maxBytes: 52428800  # 50MB
+    backupCount: 1
+    encoding: utf8
+# Loggers settings
+root:
+    level: WARNING
+    handlers: [console, all_logs_handler]
+    propagate: no
+loggers:
+  main:
+    level: DEBUG
+    handlers: [console, all_logs_handler]
+    propagate: no
+  lib:
+    level: DEBUG
+    handlers: [console, all_logs_handler]
+    propagate: no
+  lstm:
+    level: DEBUG
+    handlers: [console, all_logs_handler]
+    propagate: no
+  train_logger:
+    level: DEBUG
+    handlers: [console, train_file_handler]
+    propagate: no
